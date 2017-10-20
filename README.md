@@ -24,11 +24,14 @@ Supported arguments:
 
 ```
 usage: aws-ssh-config.py [-h] [--default-user DEFAULT_USER] [--keydir KEYDIR]
-                         [--no-identities-only] [--prefix PREFIX] [--private]
-                         [--profile PROFILE] [--region]
+                         [--no-identities-only] [--no-ssh-key]
+                         [--prefix PREFIX] [--private] [--profile PROFILE]
+                         [--proxy-host PROXY_HOST] [--proxy-line PROXY_LINE]
+                         [--region] [--ssh-key-name SSH_KEY_NAME]
                          [--strict-hostkey-checking] [--tags TAGS]
                          [--user USER]
                          [--white-list-region WHITE_LIST_REGION [WHITE_LIST_REGION ...]]
+                         [--white-list-keyvalue WHITE_LIST_KEYVALUE]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -38,11 +41,18 @@ optional arguments:
   --keydir KEYDIR       Location of private keys
   --no-identities-only  Do not include IdentitiesOnly=yes in ssh config; may
                         cause connection refused if using ssh-agent
+  --no-ssh-key          Do not include ssh key
   --prefix PREFIX       Specify a prefix to prepend to all host names
   --private             Use private IP addresses (public are used by default)
   --profile PROFILE     Specify AWS credential profile to use
+  --proxy-host PROXY_HOST
+                        Add ProxyCommand using the host you specify
+  --proxy-line PROXY_LINE
+                        Command used while proxying (Requires --proxy-host to
+                        be set)
   --region              Append the region name at the end of the concatenation
-  --ssh-key-name        Override the ssh key to use
+  --ssh-key-name SSH_KEY_NAME
+                        Override the ssh key to use
   --strict-hostkey-checking
                         Do not include StrictHostKeyChecking=no in ssh config
   --tags TAGS           A comma-separated list of tag names to be considered
@@ -51,6 +61,9 @@ optional arguments:
   --white-list-region WHITE_LIST_REGION [WHITE_LIST_REGION ...]
                         Which regions must be included. If omitted, all
                         regions are considered
+  --white-list-keyvalue WHITE_LIST_KEYVALUE
+                        A comma-separated list of tag key:value pairs that
+                        must be included. If omitted all tags are considered
 ```
 
 By default, it will name hosts by concatenating all tags:
