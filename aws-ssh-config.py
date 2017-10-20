@@ -22,6 +22,7 @@ BLACKLISTED_REGIONS = [
 
 # These tag key:value pairs will never have entries generated. Keys are case sensitive while vaules are not.
 BLACKLISTED_TAGS = [
+    'foo:bar'
 ]
 
 def generate_id(instance, tags_filter, region):
