@@ -57,6 +57,7 @@ def main():
     parser.add_argument('--default-user', help='Default ssh username to use if it can\'t be detected from AMI name')
     parser.add_argument('--keydir', default='~/.ssh/', help='Location of private keys')
     parser.add_argument('--no-identities-only', action='store_true', help='Do not include IdentitiesOnly=yes in ssh config; may cause connection refused if using ssh-agent')
+    parser.add_argument('--no-ssh-key', action='store_true', help='Do not include ssh key')
     parser.add_argument('--prefix', default='', help='Specify a prefix to prepend to all host names')
     parser.add_argument('--private', action='store_true', help='Use private IP addresses (public are used by default)')
     parser.add_argument('--profile', help='Specify AWS credential profile to use')
@@ -184,15 +185,16 @@ def main():
             except:
                 pass
 
-            if args.keydir:
-                keydir = args.keydir
-            else:
-                keydir = '~/.ssh/'
+            if not args.no_ssh_key:
+                if args.keydir:
+                    keydir = args.keydir
+                else:
+                    keydir = '~/.ssh/'
 
-            if args.ssh_key_name:
-                print '    IdentityFile ' + keydir + args.ssh_key_name + '.pem'
-            else:
-                print '    IdentityFile ' + keydir + instance.key_name.replace(' ', '_') + '.pem'
+                if args.ssh_key_name:
+                    print '    IdentityFile ' + keydir + args.ssh_key_name + '.pem'
+                else:
+                    print '    IdentityFile ' + keydir + instance.key_name.replace(' ', '_') + '.pem'
 
             if not args.no_identities_only:
                 # ensure ssh-agent keys don't flood when we know the right file to use
