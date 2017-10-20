@@ -20,6 +20,9 @@ BLACKLISTED_REGIONS = [
     'us-gov-west-1'
 ]
 
+# These tag key:value pairs will never have entries generated. Keys are case sensitive while vaules are not.
+BLACKLISTED_TAGS = [
+]
 
 def generate_id(instance, tags_filter, region):
     instance_id = ''
@@ -95,6 +98,17 @@ def main():
                 continue
 
             if instance.key_name is None:
+                continue
+
+            for bl in BLACKLISTED_TAGS:
+                blkey = bl.split(':')[0]
+                blvalue = bl.split(':')[1]
+                if blkey in instance.tags:
+                    bl_rvalue = instance.tags[blkey]
+                else:
+                    bl_rvalue = ''
+
+            if bl_rvalue.lower() == blvalue.lower():
                 continue
 
             if instance.launch_time not in instances:
