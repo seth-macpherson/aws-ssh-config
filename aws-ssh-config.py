@@ -63,6 +63,7 @@ def main():
     parser.add_argument('--tags', help='A comma-separated list of tag names to be considered for concatenation. If omitted, all tags will be used')
     parser.add_argument('--user', help='Override the ssh username for all hosts')
     parser.add_argument('--white-list-region', default='', help='Which regions must be included. If omitted, all regions are considered', nargs="+")
+    parser.add_argument('--white-list-keyvalue', help='A comma-separated list of tag key:value pairs that must be included. If omitted all tags are considered')
 
     args = parser.parse_args()
 
@@ -99,7 +100,17 @@ def main():
             if instance.launch_time not in instances:
                 instances[instance.launch_time] = []
 
-            instances[instance.launch_time].append(instance)
+            if args.white_list_keyvalue is not None:
+                for kv in args.white_list_keyvalue.split(','):
+                    key = kv.split(':')[0]
+                    value = kv.split(':')[1]
+                    if key in instance.tags:
+                        if value == instance.tags[key]:
+                            instances[instance.launch_time].append(instance)
+                    else:
+                        continue
+            else:
+                instances[instance.launch_time].append(instance)
 
             instance_id = generate_id(instance, args.tags, args.region)
 
