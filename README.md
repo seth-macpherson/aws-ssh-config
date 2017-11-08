@@ -66,7 +66,7 @@ optional arguments:
                         must be included. If omitted all tags are considered
 ```
 
-By default, it will name hosts by concatenating all tags:
+By default, it will name hosts by using the instance 'Name' tag lower-cased with underscores added for clarity:
 
 ```
 gianluca@sid:~$ python aws-ssh-config.py > ~/.ssh/config
