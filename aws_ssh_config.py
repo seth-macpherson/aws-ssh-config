@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+import pdb
 import re
 import sys
 import time
@@ -38,11 +39,8 @@ def generate_id(instance, tags_filter, region):
                     instance_id += '-' + value
     else:
         for tag, value in instance.tags.iteritems():
-            if not tag.startswith('aws'):
-                if not instance_id:
-                    instance_id = value
-                else:
-                    instance_id += '-' + value
+            if tag.startswith('Name'):
+                instance_id = value.lower()
 
     if not instance_id:
         instance_id = instance.id
@@ -177,7 +175,7 @@ def main():
                 instance_id += '-' + str(counts_incremental[instance_id])
 
             hostid = args.prefix + instance_id
-            hostid = hostid.replace(' ', '_') # get rid of spaces
+            hostid = hostid.replace(' ', '_') # get rid of spaces & make lowercase
 
             print 'Host ' + hostid
             print '    HostName ' + ip_addr
